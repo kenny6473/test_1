@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bj.dao.StudentDao">
+    <!--将namespace改为应dao的路径名就是为了实现动态代理-->
+    <!-- SQL语句 -->
+    <select id="selectStudentByID" parameterType="java.lang.Integer" resultType="com.bj.domain.Student">
+    select name,id,age,email from Student where  id = #{id};
+    </select>
+    <select id="seletAllStudent" resultType="com.bj.domain.Student">
+    select name,id,age,email from Student
+    </select>
+
+    <!-- 动态sql-if,test 中成立一条拼接一条，1=1避免后面不成立语句错误 -->
+    <select id="selectStuentByIf" resultType="com.bj.domain.Student">
+    select name,id,age,email from Student
+    where 1=1
+    <if test="name != null and name != ''">
+        name = #{name}
+    </if>
+    <if test="age > 0">
+        and age > #{age}
+    </if>
+    </select>
+
+    <!-- 动态sql-where,可以避免拼接错误，无需1=1 -->
+    <select id="selectStuentByWhere" resultType="com.bj.domain.Student">
+        select name,id,age,email from Student
+        <where>
+        <if test="name != null and name != ''">
+            name = #{name}
+        </if>
+        <if test="age > 0">
+            and age > #{age}
+        </if>
+        </where>
+    </select>
+
+</mapper>
